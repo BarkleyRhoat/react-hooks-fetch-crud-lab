@@ -15,12 +15,32 @@ function App() {
       .then((data) => setQuestions(data))
   }, [])
 
+  function handleAddQuestion(newQuestion) {
+    setQuestions([ ...questions, newQuestion])
+  }
+  
+  function handleDeleteQuestion(deletedQuestion) {
+    setQuestions(questions.filter((question) => question.id !== deletedQuestion.id));
+  }
+
+  function handleUpdateQuestion(updatedQuestion) {
+    setQuestions(questions.map((question) => question.id === updatedQuestion.id ? updatedQuestion : question));
+  }
+
   return (
-    <main>
-      <AdminNavBar onChangePage={setPage} />
-      {page === "Form" ? <QuestionForm /> : <QuestionList questions={questions} />}
-    </main>
-  );
+		<main>
+			<AdminNavBar onChangePage={setPage} />
+			{page === "Form" ? (
+				<QuestionForm onAddQuestion={handleAddQuestion} onChangePage={setPage} />
+			) : (
+				<QuestionList
+					questions={questions}
+					onDeleteQuestion={handleDeleteQuestion}
+					onUpdateQuestion={handleUpdateQuestion}
+				/>
+			)}
+		</main>
+	);
 }
 
 export default App;
